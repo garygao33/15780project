@@ -1,0 +1,7 @@
+input_file: outputs/predictions/test_predictions.jsonl
+output_file: outputs/judge/judged_predictions.jsonl
+summary_file: outputs/judge/summary.json
+model: gpt-5.2
+reasoning_effort: medium
+max_concurrency: 4
+

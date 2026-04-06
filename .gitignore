@@ -1,0 +1,15 @@
+.env
+.codex
+.venv/
+.conda/
+.conda-pkgs/
+*.egg-info/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+outputs/
+wandb/

@@ -1,0 +1,10 @@
+base_model_name: meta-llama/Llama-3.1-8B-Instruct
+adapter_path: outputs/llama31-8b-persuasion
+input_file: data/examples/test.jsonl
+output_file: outputs/predictions/test_predictions.jsonl
+load_in_4bit: true
+max_new_tokens: 256
+temperature: 0.8
+top_p: 0.95
+do_sample: true
+batch_size: 2
