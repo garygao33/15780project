@@ -1,0 +1,35 @@
+{
+  "base_model": "meta-llama/Llama-3.2-3B-Instruct",
+  "adapter_output": "outputs/llama32-3b-persuasion-pilot",
+  "wandb_run_url": "https://wandb.ai/garygao/persuasion-llm/runs/ia5in48u",
+  "training": {
+    "method": "qlora",
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "max_seq_length": 1024,
+    "per_device_train_batch_size": 4,
+    "gradient_accumulation_steps": 4,
+    "effective_batch_size": 16,
+    "max_steps": 300,
+    "max_train_samples": 6000,
+    "train_runtime_seconds": 1216.9181,
+    "train_samples_per_second": 3.944,
+    "train_steps_per_second": 0.247,
+    "train_loss": 1.6975366083780925,
+    "epoch": 0.8
+  },
+  "sample_evaluation": {
+    "num_examples": 50,
+    "baseline": {
+      "rouge1_f1": 0.3290205865334943,
+      "rougeL_f1": 0.1557264170452909,
+      "avg_prediction_chars": 818.92
+    },
+    "pilot_adapter": {
+      "rouge1_f1": 0.3573437829912691,
+      "rougeL_f1": 0.17345009123630106,
+      "avg_prediction_chars": 817.1
+    }
+  }
+}

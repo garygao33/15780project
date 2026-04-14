@@ -1,7 +1,6 @@
-input_file: outputs/predictions/test_predictions.jsonl
-output_file: outputs/judge/judged_predictions.jsonl
-summary_file: outputs/judge/summary.json
+input_file: outputs/predictions/llama32-3b-pilot.jsonl
+output_file: outputs/judge/llama32-3b-pilot.jsonl
+summary_file: outputs/judge/llama32-3b-pilot-summary.json
 model: gpt-5.2
 reasoning_effort: medium
 max_concurrency: 4
-

@@ -13,3 +13,5 @@ __pycache__/
 .ruff_cache/
 outputs/
 wandb/
+data/*.csv
+data/processed*/

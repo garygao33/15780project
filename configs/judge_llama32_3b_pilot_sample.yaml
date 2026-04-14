@@ -1,0 +1,6 @@
+input_file: outputs/predictions/llama32-3b-pilot-sample.jsonl
+output_file: outputs/judge/llama32-3b-pilot-sample.jsonl
+summary_file: outputs/judge/llama32-3b-pilot-sample-summary.json
+model: gpt-5.2
+reasoning_effort: medium
+max_concurrency: 4

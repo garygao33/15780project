@@ -1,6 +1,6 @@
 # Run Guide
 
-## 1. Create the environment
+## Setup
 
 ```bash
 CONDA_PKGS_DIRS=$PWD/.conda-pkgs conda create -y -p $PWD/.conda python=3.10
@@ -9,72 +9,83 @@ python -m pip install -r requirements.txt
 cp .env.example .env
 ```
 
-Fill in `.env`:
+Add tokens to `.env`:
 
 ```bash
+HF_TOKEN=...
 OPENAI_API_KEY=...
 OPENAI_JUDGE_MODEL=gpt-5.2
-HF_TOKEN=...
 ```
 
-## 2. Put the dataset files in place
+## Prepare Data
 
-Expected files:
-
-- `data/train.jsonl`
-- `data/validation.jsonl`
-- `data/test.jsonl`
-
-Format reference:
-
-- [data/README.md](/home/gary/Desktop/15780/project/data/README.md)
-
-## 3. Validate the dataset
+Put the teammate CSV at:
 
 ```bash
-python scripts/run.py validate --input-file data/train.jsonl --require-assistant
-python scripts/run.py validate --input-file data/validation.jsonl --require-assistant
-python scripts/run.py validate --input-file data/test.jsonl
+data/master_persuasion_studies_analytic_filtered.csv
 ```
 
-## 4. Update config paths if needed
-
-Edit:
-
-- [configs/train.yaml](/home/gary/Desktop/15780/project/configs/train.yaml)
-- [configs/generate.yaml](/home/gary/Desktop/15780/project/configs/generate.yaml)
-- [configs/judge.yaml](/home/gary/Desktop/15780/project/configs/judge.yaml)
-
-## 5. Train
+Convert it:
 
 ```bash
-python scripts/run.py train --config configs/train.yaml
+python scripts/run.py prepare-data \
+  --input-csv data/master_persuasion_studies_analytic_filtered.csv \
+  --output-dir data/processed \
+  --keep directional
 ```
 
-## 6. Generate predictions
+Validate:
 
 ```bash
-python scripts/run.py generate --config configs/generate.yaml
+python scripts/run.py validate --input-file data/processed/train.jsonl --require-assistant
+python scripts/run.py validate --input-file data/processed/validation.jsonl --require-assistant
+python scripts/run.py validate --input-file data/processed/test.jsonl
 ```
 
-## 7. Run automatic evaluation
+## Train Smaller Llama First
+
+```bash
+PYTHONNOUSERSITE=1 PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
+python scripts/run.py train --config configs/train_llama32_3b_processed.yaml
+```
+
+Adapter output:
+
+```bash
+outputs/llama32-3b-persuasion-pilot
+```
+
+## Generate
+
+Full test set:
+
+```bash
+python scripts/run.py generate --config configs/generate_llama32_3b_processed.yaml
+```
+
+Small sample:
+
+```bash
+shuf -n 50 data/processed/test.jsonl > data/processed/test_sample_50.jsonl
+python scripts/run.py generate --config configs/generate_llama32_3b_baseline_sample.yaml
+python scripts/run.py generate --config configs/generate_llama32_3b_pilot_sample.yaml
+```
+
+## Automatic Evaluation
 
 ```bash
 python scripts/run.py evaluate \
-  --input-file outputs/predictions/test_predictions.jsonl \
-  --output-file outputs/predictions/metrics.json
+  --input-file outputs/predictions/llama32-3b-baseline-sample.jsonl \
+  --output-file outputs/predictions/llama32-3b-baseline-sample-metrics.json
+
+python scripts/run.py evaluate \
+  --input-file outputs/predictions/llama32-3b-pilot-sample.jsonl \
+  --output-file outputs/predictions/llama32-3b-pilot-sample-metrics.json
 ```
 
-## 8. Run LLM-as-a-judge evaluation
+## LLM Judge
 
 ```bash
-python scripts/run.py judge --config configs/judge.yaml
+python scripts/run.py judge --config configs/judge_llama32_3b_baseline_sample.yaml
+python scripts/run.py judge --config configs/judge_llama32_3b_pilot_sample.yaml
 ```
-
-## Outputs
-
-- Adapter checkpoints: `outputs/llama31-8b-persuasion/`
-- Predictions: `outputs/predictions/test_predictions.jsonl`
-- Automatic metrics: `outputs/predictions/metrics.json`
-- Judge scores: `outputs/judge/judged_predictions.jsonl`
-- Judge summary: `outputs/judge/summary.json`
