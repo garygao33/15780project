@@ -90,6 +90,7 @@ class TrainConfig:
     seed: int = 42
     base_model_name: str = "meta-llama/Llama-3.1-8B-Instruct"
     output_dir: str = "outputs/llama31-8b-persuasion"
+    resume_from_checkpoint: str | None = None
     use_qlora: bool = True
     max_seq_length: int = 2048
     attn_implementation: str = "sdpa"
@@ -173,6 +174,7 @@ def load_train_config(path: str | Path) -> TrainConfig:
         seed=raw.get("seed", 42),
         base_model_name=raw.get("base_model_name", TrainConfig.base_model_name),
         output_dir=raw.get("output_dir", TrainConfig.output_dir),
+        resume_from_checkpoint=raw.get("resume_from_checkpoint"),
         use_qlora=raw.get("use_qlora", True),
         max_seq_length=raw.get("max_seq_length", 2048),
         attn_implementation=raw.get("attn_implementation", "sdpa"),
@@ -708,7 +710,7 @@ def build_trainer(config_path: str):
 
 def run_train(config_path: str) -> None:
     trainer, tokenizer, cfg = build_trainer(config_path)
-    train_result = trainer.train()
+    train_result = trainer.train(resume_from_checkpoint=cfg.resume_from_checkpoint)
     trainer.save_model(cfg.output_dir)
     tokenizer.save_pretrained(cfg.output_dir)
     dump_json(Path(cfg.output_dir) / "train_metrics.json", train_result.metrics)

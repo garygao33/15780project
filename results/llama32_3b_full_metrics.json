@@ -1,0 +1,21 @@
+{
+  "base_model": "meta-llama/Llama-3.2-3B-Instruct",
+  "adapter_output": "outputs/llama32-3b-persuasion-full",
+  "wandb_run": "https://wandb.ai/garygao/persuasion-llm/runs/3w0vkea4",
+  "method": "QLoRA",
+  "max_seq_length": 1024,
+  "lora": {
+    "rank": 16,
+    "alpha": 32,
+    "dropout": 0.05
+  },
+  "training": {
+    "epochs": 1.0,
+    "effective_batch_size": 16,
+    "learning_rate": 0.0002,
+    "train_loss": 0.3098641171618942,
+    "train_runtime_seconds": 4029.5626,
+    "train_samples_per_second": 15.048,
+    "train_steps_per_second": 0.941
+  }
+}

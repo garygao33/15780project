@@ -1,5 +1,4 @@
 .env
-.codex
 .venv/
 .conda/
 .conda-pkgs/
@@ -12,6 +11,7 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 outputs/
+shared_models/
 wandb/
 data/*.csv
 data/processed*/

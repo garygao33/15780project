@@ -1,0 +1,51 @@
+seed: 42
+base_model_name: meta-llama/Llama-3.2-3B-Instruct
+output_dir: outputs/llama32-3b-persuasion-full
+use_qlora: true
+max_seq_length: 1024
+attn_implementation: sdpa
+
+dataset:
+  train_file: data/processed/train.jsonl
+  validation_file: data/processed/validation.jsonl
+  text_field: text
+
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+
+training:
+  per_device_train_batch_size: 4
+  per_device_eval_batch_size: 4
+  gradient_accumulation_steps: 4
+  learning_rate: 0.0002
+  num_train_epochs: 1
+  max_steps: -1
+  logging_steps: 25
+  eval_strategy: steps
+  eval_steps: 1000
+  save_steps: 1000
+  save_total_limit: 3
+  warmup_ratio: 0.05
+  lr_scheduler_type: cosine
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  gradient_checkpointing: false
+  optim: paged_adamw_8bit
+  group_by_length: true
+  dataloader_num_workers: 4
+  tf32: true
+  disable_tqdm: false
+  run_name: llama32-3b-persuasion-full
+  report_to:
+    - wandb
