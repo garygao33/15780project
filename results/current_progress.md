@@ -1,45 +1,29 @@
 # Current Progress
 
-## Completed Full Run: Llama 3.2 3B
+## Completed Full Runs
 
-- Base model: `meta-llama/Llama-3.2-3B-Instruct`
-- Output adapter: `outputs/llama32-3b-persuasion-full`
-- Training data: `data/processed/train.jsonl`
-- Validation data: `data/processed/validation.jsonl`
-- Method: QLoRA with LoRA rank `16`, alpha `32`, dropout `0.05`
-- Max sequence length: `1024`
-- Effective batch size: `16`
-- Epochs: `1`
-- W&B run: `https://wandb.ai/garygao/persuasion-llm/runs/3w0vkea4`
+Both completed models were trained with QLoRA adapters on the processed persuasion dataset.
 
-Final saved metrics:
+| Model | Adapter | W&B Run | Train Loss | Runtime | Epoch |
+| --- | --- | --- | ---: | ---: | ---: |
+| Llama 3.2 3B Instruct | `outputs/llama32-3b-persuasion-full` | `https://wandb.ai/garygao/persuasion-llm/runs/3w0vkea4` | `0.3099` | `4029.6s` | `1.0` |
+| Qwen 2.5 3B Instruct | `outputs/qwen25-3b-persuasion-full` | `https://wandb.ai/garygao/persuasion-llm/runs/0jc2pxno` | `1.5202` | `20043.1s` | `1.0` |
 
-| Metric | Value |
-| --- | ---: |
-| Train loss | `0.3099` |
-| Runtime | `4029.6` seconds |
-| Train samples/sec | `15.048` |
-| Train steps/sec | `0.941` |
-| Epoch | `1.0` |
+The Llama run was resumed from `checkpoint-3000` after an interruption. The final adapter completed the full epoch and saved successfully.
 
-Note: this run was resumed from `checkpoint-3000` after an interruption. The adapter completed the full epoch and saved successfully.
+## Basic Sample Evaluation
 
-## Completed Pilot Evaluation
-
-A smaller pilot run was evaluated on a 50-example held-out sample.
+Each model was evaluated on the same 50-example held-out test sample. This is a reference-overlap evaluation: it measures how similar the generated response is to the dataset's target response, not whether the response would actually persuade a person.
 
 | Model | ROUGE-1 F1 | ROUGE-L F1 | Avg Prediction Chars |
 | --- | ---: | ---: | ---: |
 | Base Llama 3.2 3B | `0.3290` | `0.1557` | `818.92` |
-| Fine-tuned pilot adapter | `0.3573` | `0.1735` | `817.10` |
+| Fine-tuned Llama 3.2 3B | `0.3598` | `0.1779` | `806.22` |
+| Base Qwen 2.5 3B | `0.3048` | `0.1494` | `791.34` |
+| Fine-tuned Qwen 2.5 3B | `0.3458` | `0.1702` | `827.88` |
 
-The pilot improved reference-overlap metrics, but ROUGE is only a weak proxy for persuasion. LLM-as-a-judge evaluation is the more relevant evaluation for the final presentation.
+Both fine-tuned adapters improved over their base models on ROUGE. The Llama adapter improved ROUGE-1 by about `+0.0308` and ROUGE-L by about `+0.0222`. The Qwen adapter improved ROUGE-1 by about `+0.0410` and ROUGE-L by about `+0.0208`.
 
-## Running Comparison Run: Qwen 2.5 3B
+## Next Evaluation Step
 
-- Base model: `Qwen/Qwen2.5-3B-Instruct`
-- Output adapter: `outputs/qwen25-3b-persuasion-full`
-- Config: `configs/train_qwen25_3b_full.yaml`
-- W&B run: `https://wandb.ai/garygao/persuasion-llm/runs/0jc2pxno`
-
-This run uses the same processed dataset and similar QLoRA hyperparameters as the Llama 3B full run so that it can serve as a second model-family comparison.
+ROUGE is useful as a quick sanity check, but the main presentation should also include the LLM-as-a-judge evaluation because it directly compares persuasiveness, clarity, and relevance of model responses.

@@ -1,0 +1,11 @@
+{
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "adapter": "outputs/qwen25-3b-persuasion-full",
+  "wandb_run": "https://wandb.ai/garygao/persuasion-llm/runs/0jc2pxno",
+  "train_runtime": 20043.0616,
+  "train_samples_per_second": 3.025,
+  "train_steps_per_second": 0.189,
+  "total_flos": 1.0448920546596618e+18,
+  "train_loss": 1.5202106843208574,
+  "epoch": 1.0
+}

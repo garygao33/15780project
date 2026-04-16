@@ -1,0 +1,38 @@
+{
+  "evaluation_set": "data/processed/test_sample_50.jsonl",
+  "note": "ROUGE measures overlap with reference responses and is only a basic proxy for response quality.",
+  "metrics": [
+    {
+      "model": "meta-llama/Llama-3.2-3B-Instruct",
+      "adapter": null,
+      "num_examples": 50,
+      "avg_prediction_chars": 818.92,
+      "rouge1_f1": 0.3290205865334943,
+      "rougeL_f1": 0.1557264170452909
+    },
+    {
+      "model": "meta-llama/Llama-3.2-3B-Instruct",
+      "adapter": "outputs/llama32-3b-persuasion-full",
+      "num_examples": 50,
+      "avg_prediction_chars": 806.22,
+      "rouge1_f1": 0.35979531699160977,
+      "rougeL_f1": 0.17787817540024978
+    },
+    {
+      "model": "Qwen/Qwen2.5-3B-Instruct",
+      "adapter": null,
+      "num_examples": 50,
+      "avg_prediction_chars": 791.34,
+      "rouge1_f1": 0.304800332271427,
+      "rougeL_f1": 0.1494114939441044
+    },
+    {
+      "model": "Qwen/Qwen2.5-3B-Instruct",
+      "adapter": "outputs/qwen25-3b-persuasion-full",
+      "num_examples": 50,
+      "avg_prediction_chars": 827.88,
+      "rouge1_f1": 0.34576993986766874,
+      "rougeL_f1": 0.17023627658842422
+    }
+  ]
+}

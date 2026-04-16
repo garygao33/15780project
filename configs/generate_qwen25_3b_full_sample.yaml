@@ -1,0 +1,10 @@
+base_model_name: Qwen/Qwen2.5-3B-Instruct
+adapter_path: outputs/qwen25-3b-persuasion-full
+input_file: data/processed/test_sample_50.jsonl
+output_file: outputs/predictions/qwen25-3b-full-sample.jsonl
+load_in_4bit: true
+max_new_tokens: 160
+temperature: 0.7
+top_p: 0.9
+do_sample: false
+batch_size: 4
